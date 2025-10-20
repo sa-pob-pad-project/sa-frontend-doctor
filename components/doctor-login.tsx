@@ -100,13 +100,6 @@ export function DoctorLogin({ onLoginSuccess }: DoctorLoginProps) {
             </Button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 p-3 bg-secondary/50 rounded-lg border border-secondary">
-            <p className="text-xs font-medium text-foreground mb-2">ข้อมูลสำหรับทดสอบ:</p>
-            <p className="text-xs text-muted-foreground">อีเมล: doctor@example.com</p>
-            <p className="text-xs text-muted-foreground">รหัสผ่าน: password123</p>
-          </div>
-
           {/* Footer */}
           <div className="mt-6 text-center text-xs text-muted-foreground">
             <p>ระบบจัดการการนัดหมายแพทย์</p>

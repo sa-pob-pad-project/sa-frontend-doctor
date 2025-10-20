@@ -7,45 +7,49 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, Eye, EyeOff } from "lucide-react"
+import { doctorLoginService } from "@/services/api-services"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    // Simulate API call - replace with actual authentication
-    setTimeout(() => {
-      if (email && password) {
-        // Mock authentication - in production, call your backend
-        if (email === "doctor@example.com" && password === "password123") {
-          // Store auth data in localStorage
-          localStorage.setItem(
-            "doctorAuth",
-            JSON.stringify({
-              doctorId: "doc001",
-              doctorName: "ดร. เก่า",
-              email: email,
-            }),
-          )
-          router.push("/dashboard")
-          setIsLoading(false)
-        } else {
-          setError("อีเมลหรือรหัสผ่านไม่ถูกต้อง")
-          setIsLoading(false)
-        }
-      } else {
-        setError("กรุณากรอกอีเมลและรหัสผ่าน")
+    try {
+      if (!username || !password) {
+        setError("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน")
         setIsLoading(false)
+        return
       }
-    }, 500)
+
+      const response = await doctorLoginService.login({
+        username,
+        password,
+      })
+
+      // Store doctor auth data in localStorage
+      localStorage.setItem("doctorAuth", JSON.stringify({
+        doctorName: response.doctorName || username,
+        username: username,
+        access_token: response.access_token,
+      }))
+
+      // Redirect to dashboard (token is set in cookie by backend)
+      router.push("/dashboard")
+    } catch (err: any) {
+      console.error("Login error:", err)
+      const errorMessage = err.response?.data?.message || err.message || "เข้าสู่ระบบไม่สำเร็จ"
+      setError(errorMessage)
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -54,23 +58,20 @@ export default function LoginPage() {
         <div className="p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary"></div>
-            </div>
             <h1 className="text-2xl font-bold text-foreground mb-2">Doctor Portal</h1>
             <p className="text-muted-foreground">เข้าสู่ระบบจัดการการนัดหมาย</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Input */}
+            {/* Username Input */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">อีเมล</label>
+              <label className="text-sm font-medium text-foreground">ชื่อผู้ใช้</label>
               <Input
-                type="email"
-                placeholder="doctor@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="doctor_username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
                 className="h-10"
               />
@@ -79,14 +80,28 @@ export default function LoginPage() {
             {/* Password Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">รหัสผ่าน</label>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
-                className="h-10"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                  className="h-10 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Error Message */}
@@ -106,13 +121,6 @@ export default function LoginPage() {
               {isLoading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
             </Button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-3 bg-secondary/50 rounded-lg border border-secondary">
-            <p className="text-xs font-medium text-foreground mb-2">ข้อมูลสำหรับทดสอบ:</p>
-            <p className="text-xs text-muted-foreground">อีเมล: doctor@example.com</p>
-            <p className="text-xs text-muted-foreground">รหัสผ่าน: password123</p>
-          </div>
 
           {/* Footer */}
           <div className="mt-6 text-center text-xs text-muted-foreground">

@@ -3,7 +3,6 @@
 import { useRouter, usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { LayoutDashboard, Calendar, Pill, History, LogOut } from "lucide-react"
 
 interface SidebarProps {
@@ -17,9 +16,9 @@ export function Sidebar({ doctorName = "ดร. เก่า", onLogout }: Sideb
 
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-    { id: "appointments", label: "จัดการการนัดหมาย", icon: Calendar, href: "/dashboard/appointments", badge: 10 },
-    { id: "prescriptions", label: "ใบสั่งยา", icon: Pill, href: "/dashboard/prescriptions", badge: 29 },
-    { id: "history", label: "ประวัติปัจจุบัน", icon: History, href: "/dashboard/history" },
+    { id: "appointments", label: "Appointments", icon: Calendar, href: "/dashboard/appointments" },
+    { id: "prescriptions", label: "Prescriptions", icon: Pill, href: "/dashboard/prescriptions" },
+    { id: "history", label: "History", icon: History, href: "/dashboard/history" },
   ]
 
   const handleLogout = () => {
@@ -53,7 +52,7 @@ export function Sidebar({ doctorName = "ดร. เก่า", onLogout }: Sideb
             <button
               key={item.id}
               onClick={() => router.push(item.href)}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
+              className={`w-full flex items-center px-4 py-3 rounded-lg transition-colors ${
                 isActive
                   ? "bg-sidebar-primary text-sidebar-primary-foreground"
                   : "text-sidebar-foreground hover:bg-sidebar-accent"
@@ -63,18 +62,6 @@ export function Sidebar({ doctorName = "ดร. เก่า", onLogout }: Sideb
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{item.label}</span>
               </div>
-              {item.badge && (
-                <Badge
-                  variant={isActive ? "secondary" : "default"}
-                  className={
-                    isActive
-                      ? "bg-sidebar-primary-foreground text-sidebar-primary"
-                      : "bg-destructive text-destructive-foreground"
-                  }
-                >
-                  {item.badge}
-                </Badge>
-              )}
             </button>
           )
         })}
