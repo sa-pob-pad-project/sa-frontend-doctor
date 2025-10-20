@@ -75,7 +75,7 @@ export function Sidebar({ doctorName = "ดร. เก่า", onLogout }: Sideb
           className="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-sidebar-accent"
         >
           <LogOut className="w-4 h-4" />
-          ออกจากระบบ
+          Logout
         </Button>
       </div>
     </div>
