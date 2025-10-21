@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, Calendar, Pill, History, LogOut } from "lucide-react"
+import { LayoutDashboard, Calendar, Pill, History, Clock, LogOut } from "lucide-react"
 
 interface SidebarProps {
   doctorName?: string
@@ -17,6 +17,7 @@ export function Sidebar({ doctorName = "ดร. เก่า", onLogout }: Sideb
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
     { id: "appointments", label: "Appointments", icon: Calendar, href: "/dashboard/appointments" },
+    { id: "shift-manager", label: "Shift Manager", icon: Clock, href: "/dashboard/shifts" },
     { id: "prescriptions", label: "Prescriptions", icon: Pill, href: "/dashboard/prescriptions" },
     { id: "history", label: "History", icon: History, href: "/dashboard/history" },
   ]
