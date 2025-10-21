@@ -460,6 +460,39 @@ export function PrescriptionRequests() {
     setOrderStatus(orderId, null)
 
     try {
+      // Auto-save if there are unsaved changes
+      if (dirtyOrders[orderId]) {
+        const targetOrder = orders.find((order) => order.order_id === orderId)
+        if (targetOrder) {
+          const validItems: UpdateOrderPayload["order_items"] = []
+
+          targetOrder.order_items.forEach((item) => {
+            const quantityValue = parseFloat(item.quantity)
+
+            if (!item.medicine_id || !Number.isFinite(quantityValue) || quantityValue <= 0) {
+              return
+            }
+
+            const numericQuantity = Number(quantityValue)
+
+            validItems.push({
+              medicine_id: item.medicine_id,
+              quantity: numericQuantity,
+            })
+          })
+
+          if (validItems.length > 0) {
+            const payload: UpdateOrderPayload = {
+              order_id: orderId,
+              order_items: validItems,
+            }
+
+            await http.put("/order/v1/orders", payload)
+            clearOrderDirty(orderId)
+          }
+        }
+      }
+
       await http.post("/order/v1/orders/confirm", { order_id: orderId })
 
       clearOrderDirty(orderId)
@@ -492,6 +525,39 @@ export function PrescriptionRequests() {
     setOrderStatus(orderId, null)
 
     try {
+      // Auto-save if there are unsaved changes
+      if (dirtyOrders[orderId]) {
+        const targetOrder = orders.find((order) => order.order_id === orderId)
+        if (targetOrder) {
+          const validItems: UpdateOrderPayload["order_items"] = []
+
+          targetOrder.order_items.forEach((item) => {
+            const quantityValue = parseFloat(item.quantity)
+
+            if (!item.medicine_id || !Number.isFinite(quantityValue) || quantityValue <= 0) {
+              return
+            }
+
+            const numericQuantity = Number(quantityValue)
+
+            validItems.push({
+              medicine_id: item.medicine_id,
+              quantity: numericQuantity,
+            })
+          })
+
+          if (validItems.length > 0) {
+            const payload: UpdateOrderPayload = {
+              order_id: orderId,
+              order_items: validItems,
+            }
+
+            await http.put("/order/v1/orders", payload)
+            clearOrderDirty(orderId)
+          }
+        }
+      }
+
       await http.post("/order/v1/orders/reject", { order_id: orderId })
 
       clearOrderDirty(orderId)
