@@ -75,7 +75,16 @@ const parseDate = (value: string | null | undefined) => {
   try {
     const normalised = trimmed.includes("T") ? trimmed : trimmed.replace(" ", "T")
     const parsed = parseISO(normalised)
-    return isValid(parsed) ? parsed : null
+    
+    if (!isValid(parsed)) {
+      return null
+    }
+
+    // ปรับ timezone offset (-7 ชั่วโมง)
+    const timezoneOffset = -7 * 60 * 60 * 1000
+    const adjustedDate = new Date(parsed.getTime() + timezoneOffset)
+    
+    return adjustedDate
   } catch {
     return null
   }
