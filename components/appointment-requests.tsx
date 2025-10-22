@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useEffect, useMemo, useState } from "react"
-import { format, isValid, parseISO } from "date-fns"
+import { format, isValid, parseISO, subHours } from "date-fns"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -102,6 +102,11 @@ const formatBirthDate = (value: string | null | undefined) => {
 
   const parsed = parseDate(value)
   return parsed ? format(parsed, "MMMM d, yyyy") : "Not available"
+}
+
+const subtractSevenHours = (date: Date | null) => {
+  if (!date) return null
+  return subHours(date, 7)
 }
 
 export function AppointmentRequests() {
@@ -327,11 +332,13 @@ export function AppointmentRequests() {
             <CardContent className="p-4 sm:p-6">
               <div className="space-y-3">
                 {group.slots.map(({ appointment, start, end }) => {
+                  const adjustedStart = subtractSevenHours(start)
+                  const adjustedEnd = subtractSevenHours(end)
                   const timeRange =
-                    start && end
-                      ? `${format(start, "hh:mm a")} - ${format(end, "hh:mm a")}`
-                      : start
-                        ? format(start, "hh:mm a")
+                    adjustedStart && adjustedEnd
+                      ? `${format(adjustedStart, "hh:mm a")} - ${format(adjustedEnd, "hh:mm a")}`
+                      : adjustedStart
+                        ? format(adjustedStart, "hh:mm a")
                         : "Time not available"
 
                   const patientName = getPatientName(appointment)
