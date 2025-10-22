@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Doctor Frontend Application
 
-## Getting Started
+A modern Next.js frontend application for doctors to manage appointments, prescriptions, and shifts.
 
-First, run the development server:
+## Prerequisites
+
+- Node.js (v18 or higher)
+- npm (comes with Node.js)
+
+## Installation
+
+Follow these steps to set up and run the application:
+
+### 1. Create `.env` File
+
+Create a `.env` file in the root directory with the necessary environment variables:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Example environment variables
+NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You can copy from `.env.example` if available, or create your own based on your configuration needs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Install pnpm (if not already installed)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install pnpm globally using npm:
 
-## Learn More
+```bash
+npm install -g pnpm
+```
 
-To learn more about Next.js, take a look at the following resources:
+To verify the installation:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm --version
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Install Dependencies
 
-## Deploy on Vercel
+Install all project dependencies using pnpm:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm i
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This will install all packages listed in `package.json` and create a `pnpm-lock.yaml` file.
+
+### 4. Build the Project
+
+Build the Next.js application for production:
+
+```bash
+pnpm build
+```
+
+### 5. Start the Application
+
+Start the production server:
+
+```bash
+pnpm start
+```
+
+The application will be available at `http://localhost:3000` by default.
+
+## Development
+
+To run the application in development mode with hot reloading:
+
+```bash
+pnpm dev
+```
+
+The development server will typically run on `http://localhost:3001`
+
+
+## Troubleshooting
+
+### pnpm command not found
+
+If you get a "pnpm command not found" error, ensure pnpm is installed globally:
+
+```bash
+npm install -g pnpm
+```
+
+### Port already in use
+
+If port 3000 or 3001 is already in use, you can specify a different port:
+
+```bash
+# Development
+pnpm dev -- -p 3002
+
+# Production
+pnpm start -- -p 3002
+```
+
+### Clear cache
+
+If you encounter issues, try clearing Next.js cache:
+
+```bash
+rm -r .next
+pnpm i
+pnpm build
+```
+
+## Contribution
+  1. นพณัช สาทิพย์พงษ์ besterOz
+  2. พงศธร รักงาน prukngan
+  3. ภวัต เลิศตระกูลชัย Phawat Loedtrakunchai
+  4. ธฤต จันทร์ดี tharitpr
+
+
